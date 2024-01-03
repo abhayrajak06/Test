@@ -1,7 +1,9 @@
 import express from "express";
-import bcrypt from "bcrypt";
-import JWT from "jsonwebtoken";
-import { registerController } from "../controllers/authControllers.js";
+import {
+  loginController,
+  logoutController,
+  registerController,
+} from "../controllers/authControllers.js";
 
 const router = express.Router();
 
@@ -9,7 +11,9 @@ const router = express.Router();
 router.post("/register", registerController);
 
 //Login
+router.post("/login", loginController);
 
 //Logout
+router.get("/logout", logoutController);
 
 export default router;
