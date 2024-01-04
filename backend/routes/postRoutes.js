@@ -5,6 +5,7 @@ import {
   getAllPostsController,
   getPostDetailsController,
   getUserPostsController,
+  searchPostController,
   updatePostController,
 } from "../controllers/postController.js";
 const router = express.Router();
@@ -13,18 +14,21 @@ const router = express.Router();
 router.post("/create", createPostController);
 
 //update
-router.put("/:id", updatePostController);
+router.put("/update/:id", updatePostController);
 
 //delete
 router.delete("/:id", deletePostController);
 
 //get user posts
-router.get("/:userId", getUserPostsController);
+router.get("/user/:userId", getUserPostsController);
 
 //get all posts
 router.get("/", getAllPostsController);
 
 //get post details
 router.get("/:postId", getPostDetailsController);
+
+//search posts
+router.get("/search/:keyword", searchPostController);
 
 export default router;
