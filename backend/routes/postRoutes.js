@@ -8,19 +8,20 @@ import {
   searchPostController,
   updatePostController,
 } from "../controllers/postController.js";
+import verifyToken from "../middlewares/verifyToken.js";
 const router = express.Router();
 
 //create
-router.post("/create", createPostController);
+router.post("/create", verifyToken, createPostController);
 
 //update
-router.put("/update/:id", updatePostController);
+router.put("/update/:id", verifyToken, updatePostController);
 
 //delete
-router.delete("/:id", deletePostController);
+router.delete("/:id", verifyToken, deletePostController);
 
 //get user posts
-router.get("/user/:userId", getUserPostsController);
+router.get("/user/:userId", verifyToken, getUserPostsController);
 
 //get all posts
 router.get("/", getAllPostsController);

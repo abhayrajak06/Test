@@ -15,8 +15,8 @@ const postSchema = new mongoose.Schema(
     photo: {
       type: String,
     },
-    userName: {
-      type: mongoose.Schema.Types.ObjectId,
+    username: {
+      type: mongoose.Schema.Types.String,
       ref: "User",
       required: true,
     },
