@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { URL } from "../url";
 import toast from "react-hot-toast";
+import { useAuth } from "../context/UserContext";
 
 const Login = () => {
   const [details, setDetails] = useState({
@@ -11,6 +12,7 @@ const Login = () => {
   });
   const [error, setError] = useState(false);
   const navigate = useNavigate();
+  const [, setUser] = useAuth();
   const handleChange = (e) => {
     setDetails({ ...details, [e.target.name]: e.target.value });
   };
@@ -18,12 +20,17 @@ const Login = () => {
     e.preventDefault();
     try {
       const { email, password } = details;
-      const res = await axios.post(`${URL}/api/v1/auth/login`, {
-        email,
-        password,
-      });
+      const res = await axios.post(
+        `${URL}/api/v1/auth/login`,
+        {
+          email,
+          password,
+        },
+        { withCredentials: true }
+      );
       if (res?.data) {
         toast.success("Login Successfully");
+        setUser(res?.data);
         navigate("/");
       }
       console.log("login successful");
@@ -41,7 +48,7 @@ const Login = () => {
         <h1 className="text-xl  font-extrabold">
           <Link to={"/"}>Blog Market</Link>
         </h1>
-        <h3>
+        <h3 className="btn nav-btn bg-slate-200 rounded-md p-1 font-semibold">
           <Link to="/register">Register</Link>
         </h3>
       </div>

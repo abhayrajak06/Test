@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { URL } from "../url";
+import toast from "react-hot-toast";
+import { useAuth } from "../context/UserContext";
 
 const Register = () => {
   const [details, setDetails] = useState({
@@ -16,6 +18,7 @@ const Register = () => {
   });
   const [error, setError] = useState(false);
   const navigate = useNavigate();
+  const { setUser } = useAuth();
 
   const handleChange = (e) => {
     setDetails({ ...details, [e.target.name]: e.target.value });
@@ -67,7 +70,10 @@ const Register = () => {
         password,
       });
 
-      if (res?.data) navigate("/");
+      if (res?.data) {
+        toast.success("Register Successfully !");
+        navigate("/login");
+      }
     } catch (error) {
       setError(true);
     }
@@ -82,7 +88,7 @@ const Register = () => {
         <h1 className="text-xl font-extrabold">
           <Link to={"/"}>Blog Market</Link>
         </h1>
-        <h3>
+        <h3 className="btn nav-btn bg-slate-200 rounded-md p-1 font-semibold">
           <Link to="/login">Login</Link>
         </h3>
       </div>
