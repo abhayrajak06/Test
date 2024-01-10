@@ -1,18 +1,44 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { BsSearch } from "react-icons/bs";
 import { GiCrossedBones } from "react-icons/gi";
 import { useAuth } from "../context/UserContext";
 import Cookies from "js-cookie";
 import toast from "react-hot-toast";
+import axios from "axios";
+import { URL } from "../url";
 
-const Navbar = () => {
+const Navbar = ({ setPosts, getAllPosts, setNoResults }) => {
   const [toggle, setToggle] = useState(false);
 
   const handleToggle = () => {
     setToggle(!toggle);
   };
+  const [keyword, setKeyword] = useState("");
   const navigate = useNavigate();
+
+  const getAllSearchPosts = async () => {
+    try {
+      const res = await axios.get(`${URL}/api/v1/post/search/${keyword}`);
+      if (res?.data) {
+        setPosts(res?.data);
+      }
+      if (res?.data.length === 0) {
+        setNoResults(true);
+      } else {
+        setNoResults(false);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (setPosts && getAllPosts) {
+      if (keyword.length) getAllSearchPosts();
+      else getAllPosts();
+    }
+  }, [keyword]);
 
   const [user, setUser] = useAuth();
 
@@ -38,6 +64,8 @@ const Navbar = () => {
           </p>
           <input
             type="text"
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
             className={`search-bar mt-1 outline-none px-5 rounded w-[15rem] h-[2rem] ${
               toggle ? "hidden" : ""
             }`}
