@@ -8,7 +8,7 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import { URL } from "../url";
 
-const Navbar = ({ setPosts, getAllPosts, setNoResults }) => {
+const Navbar = ({ setPosts, getAllPosts, setNoResults, setLoading }) => {
   const [toggle, setToggle] = useState(false);
 
   const handleToggle = () => {
@@ -19,6 +19,7 @@ const Navbar = ({ setPosts, getAllPosts, setNoResults }) => {
 
   const getAllSearchPosts = async () => {
     try {
+      setLoading(true);
       const res = await axios.get(`${URL}/api/v1/post/search/${keyword}`);
       if (res?.data) {
         setPosts(res?.data);
@@ -28,6 +29,7 @@ const Navbar = ({ setPosts, getAllPosts, setNoResults }) => {
       } else {
         setNoResults(false);
       }
+      setLoading(false);
     } catch (error) {
       console.log(error);
     }
