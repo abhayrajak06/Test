@@ -18,3 +18,8 @@
 
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
+
+#homePost:hover{
+    transform: scale(1.009);
+    transition: 0.3s;
+}

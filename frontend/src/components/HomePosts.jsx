@@ -2,7 +2,10 @@ import React from "react";
 
 const HomePosts = ({ post }) => {
   return (
-    <div className="w-full flex flex-wrap justify-center gap-10 mt-8  mb-10">
+    <div
+      className="w-full flex flex-wrap justify-center gap-10 mt-8  mb-10  cursor-pointer border-r-2 border-l-2 border-indigo-500"
+      id="homePost"
+    >
       <div className="flex justify-center items-center w-[30%] h-[200px]">
         <img
           src={post.photo}
