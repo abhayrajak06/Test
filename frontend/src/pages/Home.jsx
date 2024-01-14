@@ -5,6 +5,7 @@ import Footer from "../components/Footer";
 import axios from "axios";
 import { URL } from "../url";
 import Loader from "../components/Loader";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
@@ -45,7 +46,15 @@ const Home = () => {
             No Posts Available
           </h3>
         ) : (
-          posts.map((p) => <HomePosts key={p._id} post={p} />)
+          posts.map((p) => (
+            <Link
+              onClick={() => window.scrollTo(0, 0)}
+              to={`/posts/post/${p._id}`}
+              key={p._id}
+            >
+              <HomePosts post={p} />
+            </Link>
+          ))
         )}
       </div>
       <Footer />

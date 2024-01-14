@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { BsSearch } from "react-icons/bs";
 import { GiCrossedBones } from "react-icons/gi";
 import { useAuth } from "../context/UserContext";
@@ -16,6 +16,7 @@ const Navbar = ({ setPosts, getAllPosts, setNoResults, setLoading }) => {
   };
   const [keyword, setKeyword] = useState("");
   const navigate = useNavigate();
+  const path = useLocation().pathname;
 
   const getAllSearchPosts = async () => {
     try {
@@ -58,22 +59,26 @@ const Navbar = ({ setPosts, getAllPosts, setNoResults, setLoading }) => {
     >
       <div id="nav-wrap" className="flex md:gap-5 gap-2">
         <h1 className="text-xl font-extrabold">
-          <Link to={"/"}>Blog Market</Link>
+          <Link onClick={() => window.scrollTo(0, 0)} to={"/"}>
+            Blog Market
+          </Link>
         </h1>
-        <div className="flex gap-2  justify-center items-center space-x-0 ">
-          <p className="p-2" onClick={handleToggle}>
-            <BsSearch />
-          </p>
-          <input
-            type="text"
-            value={keyword}
-            onChange={(e) => setKeyword(e.target.value)}
-            className={`search-bar mt-1 outline-none px-5 rounded w-[15rem] h-[2rem] ${
-              toggle ? "hidden" : ""
-            }`}
-            placeholder="Search"
-          />
-        </div>
+        {path === "/" && (
+          <div className="flex gap-2  justify-center items-center space-x-0 ">
+            <p className="p-2" onClick={handleToggle}>
+              <BsSearch />
+            </p>
+            <input
+              type="text"
+              value={keyword}
+              onChange={(e) => setKeyword(e.target.value)}
+              className={`search-bar mt-1 outline-none px-5 rounded w-[15rem] h-[2rem] ${
+                toggle ? "hidden" : ""
+              }`}
+              placeholder="Search"
+            />
+          </div>
+        )}
       </div>
       <div className="flex gap-5">
         <div
