@@ -16,7 +16,10 @@ const PageNotFound = () => {
       >
         <h1 className="text-9xl font-bold">404</h1>
         <h2 className="text-2xl m-2">Page Not Found!</h2>
-        <button onClick={goBack} className="btn bg-slate-600 p-2 mt-1 rounded">
+        <button
+          onClick={goBack}
+          className="btn bg-amber-700 p-2 mt-1 rounded font-bold hover:bg-slate-900 hover:text-white search-bar"
+        >
           Go Back
         </button>
       </div>
