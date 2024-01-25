@@ -2,10 +2,20 @@ import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { ImCross } from "react-icons/im";
+import { useAuth } from "../context/UserContext";
+import axios from "axios";
+import { URL } from "../url";
 
 const CreatePost = () => {
   const [cat, setCat] = useState("");
   const [cats, setCats] = useState([]);
+
+  const [title, setTitle] = useState("");
+  const [desc, setDesc] = useState("");
+  const [file, setFile] = useState(null);
+
+  const [user] = useAuth();
+
   const addCategory = () => {
     let updatedCats = new Set([...cats]);
     if (cat.trim().length > 0) {
@@ -20,8 +30,37 @@ const CreatePost = () => {
     setCats(updatedCats);
   };
 
-  const handleCreate = (e) => {
+  const handleCreate = async (e) => {
     e.preventDefault();
+    try {
+      const post = {
+        title,
+        desc,
+        username: user?.username,
+        userId: user?._id,
+        categories: cats,
+      };
+      if (file) {
+        const data = new FormData();
+        const filename = Date.now() + file.name;
+        data.append("img", filename);
+        data.append("file", file);
+        post.photo = filename;
+        //img upload
+        try {
+          const imgUpload = await axios.post(`${URL}/api/v1/upload`, data);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+      const res = await axios.post(`${URL}/api/v1/post/create`, post, {
+        withCredentials: true,
+      });
+
+      console.log(res?.data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -34,11 +73,16 @@ const CreatePost = () => {
           className="w-full flex flex-col space-y-4 md:space-y-8 mt-5"
         >
           <input
+            onChange={(e) => setTitle(e.target.value)}
             type="text"
             placeholder="Enter post title"
             className="px-4 py-2 outline-none"
           />
-          <input type="file" className="px-4 py-2 outline-none" />
+          <input
+            onChange={(e) => setFile(e.target.files[0])}
+            type="file"
+            className="px-4 py-2 outline-none"
+          />
           <div className="flex flex-col">
             <div className="flex items-center space-x-4 md:space-x-8">
               <input
@@ -77,12 +121,16 @@ const CreatePost = () => {
           <textarea
             name=""
             id=""
+            onChange={(e) => setDesc(e.target.value)}
             className="px-4 py-2"
             placeholder="Enter post description"
             cols="30"
             rows="10"
           ></textarea>
-          <button className="bg-black w-full md:w-[20%] mx-auto text-white font-semibold px-4 py-2 md:text-xl text-lg">
+          <button
+            onClick={handleCreate}
+            className="bg-black w-full md:w-[20%] mx-auto text-white font-semibold px-4 py-2 md:text-xl text-lg"
+          >
             Create
           </button>
         </form>
