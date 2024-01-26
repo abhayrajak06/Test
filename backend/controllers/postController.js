@@ -1,3 +1,4 @@
+import Comment from "../models/Comment.js";
 import Post from "../models/Post.js";
 
 export const createPostController = async (req, res) => {
@@ -27,6 +28,7 @@ export const updatePostController = async (req, res) => {
 export const deletePostController = async (req, res) => {
   try {
     await Post.findByIdAndDelete(req.params.id);
+    await Comment.deleteMany({ postId: req.params.id });
     res.status(200).json("Post has been deleted");
   } catch (error) {
     res.status(500).json(error);

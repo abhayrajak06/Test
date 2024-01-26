@@ -18,7 +18,7 @@ router.post("/create", verifyToken, createPostController);
 router.put("/update/:id", verifyToken, updatePostController);
 
 //delete
-router.delete("/:id", verifyToken, deletePostController);
+router.delete("/:id", deletePostController);
 
 //get user posts
 router.get("/user/:userId", verifyToken, getUserPostsController);

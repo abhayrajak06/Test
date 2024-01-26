@@ -4,17 +4,19 @@ import { BiEdit } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
 import Footer from "../components/Footer";
 import Comment from "../components/Comment";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { URL } from "../url";
 import { useAuth } from "../context/UserContext";
 import Loader from "../components/Loader";
+import toast from "react-hot-toast";
 
 const PostDetails = () => {
   const [postDetails, setPostDetails] = useState({});
   const postId = useParams().id;
   const [user] = useAuth();
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
   // console.log(postId);
   const getPostDetails = async () => {
     try {
@@ -28,6 +30,17 @@ const PostDetails = () => {
     } catch (error) {
       console.log(error);
       setLoading(false);
+    }
+  };
+  const handleDeletePost = async () => {
+    try {
+      const res = await axios.delete(`${URL}/api/v1/post/${postId}`);
+      if (res?.data) {
+        toast.success("Post deleted successfully");
+        navigate("/");
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
   useEffect(() => {
@@ -49,7 +62,7 @@ const PostDetails = () => {
                 <p className="cursor-pointer">
                   <BiEdit />
                 </p>
-                <p className="cursor-pointer">
+                <p className="cursor-pointer" onClick={handleDeletePost}>
                   <MdDelete />
                 </p>
               </div>
