@@ -59,7 +59,10 @@ const PostDetails = () => {
             </h1>
             {user?._id === postDetails?.userId && (
               <div className="flex items-center justify-center space-x-2">
-                <p className="cursor-pointer">
+                <p
+                  className="cursor-pointer"
+                  onClick={() => navigate("/posts/post/edit/" + postId)}
+                >
                   <BiEdit />
                 </p>
                 <p className="cursor-pointer" onClick={handleDeletePost}>

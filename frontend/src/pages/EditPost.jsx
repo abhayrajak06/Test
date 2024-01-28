@@ -1,11 +1,34 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { ImCross } from "react-icons/im";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import { URL } from "../url";
 
 const EditPost = () => {
   const [cat, setCat] = useState("");
   const [cats, setCats] = useState([]);
+  const [title, setTitle] = useState("");
+  const [desc, setDesc] = useState("");
+  const [file, setFile] = useState(null);
+  const postId = useParams().id;
+
+  const fetchPost = async () => {
+    try {
+      const res = await axios.get(URL + "/api/v1/post/" + postId);
+      setTitle(res?.data?.title);
+      setDesc(res?.data?.desc);
+      setFile(res?.data?.photo);
+      setCats(res?.data?.categories);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    fetchPost();
+  }, [postId]);
+
   const addCategory = () => {
     let updatedCats = new Set([...cats]);
     if (cat.trim().length > 0) {
@@ -33,6 +56,8 @@ const EditPost = () => {
         >
           <input
             type="text"
+            onChange={(e) => setTitle(e.target.value)}
+            value={title}
             placeholder="Enter post title"
             className="px-4 py-2 outline-none"
           />
@@ -75,6 +100,8 @@ const EditPost = () => {
           <textarea
             name=""
             id=""
+            onChange={(e) => setDesc(e.target.value)}
+            value={desc}
             className="px-4 py-2"
             placeholder="Enter post description"
             cols="30"
