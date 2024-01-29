@@ -16,8 +16,44 @@ const PostDetails = () => {
   const postId = useParams().id;
   const [user] = useAuth();
   const [loading, setLoading] = useState(false);
+  const [comments, setComments] = useState([]);
+  const [comment, setComment] = useState("");
   const navigate = useNavigate();
   // console.log(postId);
+
+  const postComment = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post(
+        URL + "/api/v1/comment/create",
+        {
+          comment: comment,
+          author: user.username,
+          postId: postId,
+          userId: user._id,
+        },
+        { withCredentials: true }
+      );
+      if (res?.data) {
+        fetchPostComments();
+        setComment("");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchPostComments = async () => {
+    try {
+      const res = await axios.get(URL + "/api/v1/comment/comments/" + postId);
+      setComments(res?.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    fetchPostComments();
+  }, [postId]);
   const getPostDetails = async () => {
     try {
       setLoading(true);
@@ -95,18 +131,26 @@ const PostDetails = () => {
           <div className="flex flex-col mt-4">
             <h3 className="mt-6 mb-4 font-semibold">Comments:</h3>
             {/* comment */}
+            {comments?.map((c) => (
+              <Comment key={c._id} c={c} />
+            ))}
+            {/* <Comment />
             <Comment />
-            <Comment />
-            <Comment />
+            <Comment /> */}
           </div>
           {/* write a comment  */}
           <div className="flex flex-col mt-4 md:flex-row">
             <input
               type="text"
+              onChange={(e) => setComment(e.target.value)}
+              value={comment}
               className="md:w-[80%] outline-none px-4 mt-4 md:mt-0 py-2"
               placeholder="Write a comment"
             />
-            <button className="bg-black  text-white px-2 py-2 mt-4 md:mt-0 md:w-[20%]">
+            <button
+              onClick={postComment}
+              className="bg-black  text-white px-2 py-2 mt-4 md:mt-0 md:w-[20%]"
+            >
               Add Comment
             </button>
           </div>
