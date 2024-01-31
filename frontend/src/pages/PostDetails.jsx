@@ -53,7 +53,7 @@ const PostDetails = () => {
   };
   useEffect(() => {
     fetchPostComments();
-  }, [postId]);
+  }, [postId, comments, comment]);
   const getPostDetails = async () => {
     try {
       setLoading(true);
@@ -139,7 +139,10 @@ const PostDetails = () => {
             <Comment /> */}
           </div>
           {/* write a comment  */}
-          <div className="flex flex-col mt-4 md:flex-row">
+          <form
+            onSubmit={postComment}
+            className="flex flex-col mt-4 md:flex-row"
+          >
             <input
               type="text"
               onChange={(e) => setComment(e.target.value)}
@@ -148,12 +151,12 @@ const PostDetails = () => {
               placeholder="Write a comment"
             />
             <button
-              onClick={postComment}
+              type="submit"
               className="bg-black  text-white px-2 py-2 mt-4 md:mt-0 md:w-[20%]"
             >
               Add Comment
             </button>
-          </div>
+          </form>
         </div>
       )}
       <Footer />
