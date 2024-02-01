@@ -70,10 +70,15 @@ const PostDetails = () => {
   };
   const handleDeletePost = async () => {
     try {
-      const res = await axios.delete(`${URL}/api/v1/post/${postId}`);
-      if (res?.data) {
-        toast.success("Post deleted successfully");
-        navigate("/");
+      const confirmDelete = window.confirm(
+        "Are you sure you want to delete this post?"
+      );
+      if (confirmDelete) {
+        const res = await axios.delete(`${URL}/api/v1/post/${postId}`);
+        if (res?.data) {
+          toast.success("Post deleted successfully");
+          navigate("/");
+        }
       }
     } catch (error) {
       console.log(error);
@@ -132,11 +137,12 @@ const PostDetails = () => {
             <h3 className="mt-6 mb-4 font-semibold">Comments:</h3>
             {/* comment */}
             {comments?.map((c) => (
-              <Comment key={c._id} c={c} />
+              <Comment
+                key={c._id}
+                c={c}
+                fetchPostComments={fetchPostComments}
+              />
             ))}
-            {/* <Comment />
-            <Comment />
-            <Comment /> */}
           </div>
           {/* write a comment  */}
           <form
