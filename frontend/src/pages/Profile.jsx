@@ -1,40 +1,32 @@
 import React from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import ProfilePosts from "../components/ProfilePosts";
 
 const Profile = () => {
   return (
     <div>
       <Navbar />
       <div
-        className="flex flex-col-reverse px-8 md:px-[200px] mt-8 md:flex-row items-start"
+        className="flex mt-8 md:flex-row items-center justify-center"
         style={{ minHeight: "60vh" }}
       >
-        <div className="flex flex-col w-full md:w-[70%]">
-          <h1 className="text-xl font-bold mb-4">Your Posts:</h1>
-          <ProfilePosts />
-          <ProfilePosts />
-          <ProfilePosts />
-          <ProfilePosts />
-        </div>
-        <div className=" md:sticky md:top-16 flex justify-start md:justify-end items-start md:w-[30%] w-full mb-4  ">
-          <div className="flex flex-col space-y-4 items-start">
-            <h1 className="text-xl font-bold mb-4">Profile</h1>
+        <div className="md:sticky md:top-16 flex justify-center md:justify-end items-start mb-4 border-2 p-10 ">
+          <div className="flex flex-col space-y-4 items-center justify-center">
+            <h1 className="text-2xl font-bold mb-4">Profile</h1>
             <input
               type="text"
-              className="outline-none px-4 py-2 text-gray-500"
+              className="outline-none border-b-2 border-indigo-200 px-4 py-2 text-gray-500"
               placeholder="Your username"
             />
             <input
               type="email"
-              className="outline-none px-4 py-2 text-gray-500"
+              className=" border-b-2 border-indigo-200 px-4 py-2 text-gray-500"
               placeholder="Your email"
               disabled
             />
             <input
               type="password"
-              className="outline-none px-4 py-2 text-gray-500"
+              className=" border-b-2 border-indigo-200 px-4 py-2 text-gray-500"
               placeholder="Your password"
             />
             <div className="flex items-center space-x-4 mt-8">

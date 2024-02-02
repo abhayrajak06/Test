@@ -11,6 +11,7 @@ import CreatePost from "./pages/CreatePost";
 import EditPost from "./pages/EditPost";
 import Profile from "./pages/Profile";
 import { Toaster } from "react-hot-toast";
+import MyBlogs from "./pages/MyBlogs";
 
 const App = () => {
   return (
@@ -25,6 +26,7 @@ const App = () => {
           <Route path="/posts/post/:id" element={<PostDetails />} />
           <Route path="/posts/post/edit/:id" element={<EditPost />} />
           <Route path="/profile/:id" element={<Profile />} />
+          <Route path="/my-blogs" element={<MyBlogs />} />
           <Route path="/*" element={<PageNotFound />} />
         </Routes>
         {/* <Footer /> */}

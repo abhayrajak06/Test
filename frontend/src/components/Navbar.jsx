@@ -89,7 +89,7 @@ const Navbar = ({ setPosts, getAllPosts, setNoResults, setLoading }) => {
           {user ? (
             <>
               <h3 className="btn nav-btn bg-slate-200 rounded-md p-1 font-semibold">
-                <Link to="/profile">Profile</Link>
+                <Link to={`/profile/${user._id}`}>Profile</Link>
               </h3>
               <h3 className="btn nav-btn bg-slate-200 rounded-md p-1 font-semibold">
                 <Link to="/write">Write</Link>
