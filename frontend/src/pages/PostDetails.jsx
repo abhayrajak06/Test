@@ -140,6 +140,7 @@ const PostDetails = () => {
               <Comment
                 key={c._id}
                 c={c}
+                postDetails={postDetails}
                 fetchPostComments={fetchPostComments}
               />
             ))}

@@ -6,10 +6,13 @@ import { URL } from "../url";
 import toast from "react-hot-toast";
 import { useAuth } from "../context/UserContext";
 
-const Comment = ({ c, fetchPostComments }) => {
+const Comment = ({ c, postDetails, fetchPostComments }) => {
   const [user] = useAuth();
   const [updatePopupOpen, setUpdatePopupOpen] = useState(false);
   const [updatedComment, setUpdatedComment] = useState(c.comment);
+  let isAuthor = false;
+
+  if (postDetails?.userId === c?.userId) isAuthor = true;
 
   const popupRef = useRef(null);
 
@@ -70,7 +73,17 @@ const Comment = ({ c, fetchPostComments }) => {
   return (
     <div className="px-2 py-2 bg-gray-200 rounded-lg my-2">
       <div className="flex items-center justify-between">
-        <h3 className="font-bold text-gray-600">@{c.author}</h3>
+        <h3 className="font-bold text-gray-600">
+          @{c.author}{" "}
+          {isAuthor && (
+            <span
+              className="border-2 text-sm border border-slate-300 rounded bg-slate-300 p-1"
+              style={{ fontSize: "0.6rem" }}
+            >
+              Author
+            </span>
+          )}
+        </h3>
         <div className="flex flex-wrap justify-center items-center space-x-4">
           <p className="text-gray-500 text-sm">
             {new Date(c.updatedAt).toString().slice(0, 15)}
