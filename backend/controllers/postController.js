@@ -1,5 +1,6 @@
 import Comment from "../models/Comment.js";
 import Post from "../models/Post.js";
+import { uploadOnCloudinary } from "../utils/cloudinary.js";
 
 export const createPostController = async (req, res) => {
   try {
@@ -87,5 +88,19 @@ export const searchPostController = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+//upload image
+export const uploadImage = async (req, res) => {
+  try {
+    const result = await uploadOnCloudinary(req.files.image.path);
+    console.log(result);
+    res.json({
+      url: result.secure_url,
+      public_id: result.public_id,
+    });
+  } catch (error) {
+    console.log(error);
   }
 };

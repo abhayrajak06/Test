@@ -78,7 +78,7 @@ const Comment = ({ c, postDetails, fetchPostComments }) => {
           {isAuthor && (
             <span
               className="border-2 text-sm border border-slate-300 rounded bg-slate-300 p-1"
-              style={{ fontSize: "0.6rem" }}
+              style={{ fontSize: "0.6rem", cursor: "pointer" }}
             >
               Author
             </span>

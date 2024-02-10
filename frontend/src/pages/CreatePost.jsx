@@ -42,13 +42,15 @@ const CreatePost = () => {
       };
       if (file) {
         const data = new FormData();
-        const filename = Date.now() + file.name;
-        data.append("img", filename);
-        data.append("file", file);
-        post.photo = filename;
+        // const filename = Date.now() + file.name;
+        // data.append("img", filename);
+        // data.append("file", file);
+        // post.photo = filename;
+        data.append("image", file);
+        console.log([...data]);
         //img upload
         try {
-          const imgUpload = await axios.post(`${URL}/api/v1/upload`, data);
+          const res = await axios.post(`${URL}/api/v1/post/upload-image`, data);
         } catch (error) {
           console.log(error);
         }
@@ -81,6 +83,7 @@ const CreatePost = () => {
           <input
             onChange={(e) => setFile(e.target.files[0])}
             type="file"
+            accept="images/*"
             className="px-4 py-2 outline-none"
           />
           <div className="flex flex-col">
