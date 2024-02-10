@@ -93,7 +93,7 @@ const PostDetails = () => {
       {loading ? (
         <Loader />
       ) : (
-        <div className="px-8 mt-8 md:px-[200px]">
+        <div className="px-8 mt-8 md:px-[200px] min-h-[76vh]">
           <div className="flex justify-between items-center">
             <h1 className="text-2xl font-bold text-black md:text-3xl">
               {postDetails.title}

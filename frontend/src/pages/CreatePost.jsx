@@ -4,7 +4,9 @@ import Footer from "../components/Footer";
 import { ImCross } from "react-icons/im";
 import { useAuth } from "../context/UserContext";
 import axios from "axios";
-import { URL } from "../url";
+import { URL as url } from "../url";
+import { useNavigate } from "react-router-dom";
+import Loader from "../components/Loader";
 
 const CreatePost = () => {
   const [cat, setCat] = useState("");
@@ -13,6 +15,10 @@ const CreatePost = () => {
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [file, setFile] = useState(null);
+  const [photo, setPhoto] = useState("");
+  const [photoPreview, setPhotoPreview] = useState(null);
+  const navigate = useNavigate();
+  const [loader, setLoader] = useState(false);
 
   const [user] = useAuth();
 
@@ -36,32 +42,41 @@ const CreatePost = () => {
       const post = {
         title,
         desc,
+        photo,
         username: user?.username,
         userId: user?._id,
         categories: cats,
       };
-      if (file) {
-        const data = new FormData();
-        // const filename = Date.now() + file.name;
-        // data.append("img", filename);
-        // data.append("file", file);
-        // post.photo = filename;
-        data.append("image", file);
-        console.log([...data]);
-        //img upload
-        try {
-          const res = await axios.post(`${URL}/api/v1/post/upload-image`, data);
-        } catch (error) {
-          console.log(error);
-        }
-      }
-      const res = await axios.post(`${URL}/api/v1/post/create`, post, {
+      const res = await axios.post(`${url}/api/v1/post/create`, post, {
         withCredentials: true,
       });
 
-      console.log(res?.data);
+      // console.log(res?.data);
+      if (res?.data) navigate("/my-blogs");
+      else navigate("/");
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const handleFileChange = async (e) => {
+    const selectedFile = e.target.files[0];
+    setFile(selectedFile);
+    setPhotoPreview(URL.createObjectURL(selectedFile));
+
+    const data = new FormData();
+    data.append("image", selectedFile);
+    //img upload
+    try {
+      setLoader(true);
+      const res = await axios.post(`${url}/api/v1/post/upload-image`, data);
+      if (res?.data) {
+        setPhoto(res?.data?.url);
+      }
+      setLoader(false);
+    } catch (error) {
+      console.log(error);
+      setLoader(false);
     }
   };
 
@@ -81,11 +96,19 @@ const CreatePost = () => {
             className="px-4 py-2 outline-none"
           />
           <input
-            onChange={(e) => setFile(e.target.files[0])}
+            onChange={handleFileChange}
             type="file"
             accept="images/*"
             className="px-4 py-2 outline-none"
           />
+          {loader ? (
+            <Loader />
+          ) : (
+            photoPreview && (
+              <img src={photoPreview} alt="Preview" className="mt-2 max-w-xs" />
+            )
+          )}
+
           <div className="flex flex-col">
             <div className="flex items-center space-x-4 md:space-x-8">
               <input

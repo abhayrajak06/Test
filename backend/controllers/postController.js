@@ -95,7 +95,7 @@ export const searchPostController = async (req, res) => {
 export const uploadImage = async (req, res) => {
   try {
     const result = await uploadOnCloudinary(req.files.image.path);
-    console.log(result);
+    // console.log(result);
     res.json({
       url: result.secure_url,
       public_id: result.public_id,
