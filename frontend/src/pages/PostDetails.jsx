@@ -28,9 +28,9 @@ const PostDetails = () => {
         URL + "/api/v1/comment/create",
         {
           comment: comment,
-          author: user.username,
+          author: user?.username,
           postId: postId,
-          userId: user._id,
+          userId: user?._id,
         },
         { withCredentials: true }
       );

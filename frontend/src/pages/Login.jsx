@@ -33,7 +33,6 @@ const Login = () => {
         setUser(res?.data);
         navigate("/");
       }
-      console.log("login successful");
     } catch (error) {
       setError(true);
       console.log(error);

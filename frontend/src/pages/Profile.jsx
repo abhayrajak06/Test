@@ -14,23 +14,25 @@ const Profile = () => {
   const [user, setUser] = useAuth();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const getUserInfo = async () => {
-      try {
-        const res = await axios.get(`${URL}/api/v1/user/${user._id}`);
+  const getUserInfo = async () => {
+    try {
+      if (user?._id) {
+        const res = await axios.get(`${URL}/api/v1/user/${user?._id}`);
         setName(res?.data.username);
         setEmail(res?.data.email);
-      } catch (error) {
-        console.log(error);
       }
-    };
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
     getUserInfo();
-  }, [user._id]);
+  }, [user?._id]);
 
   const handleUpdate = async () => {
     try {
       const res = await axios.put(
-        `${URL}/api/v1/user/${user._id}`,
+        `${URL}/api/v1/user/${user?._id}`,
         {
           username: name,
           password: password,
@@ -51,7 +53,7 @@ const Profile = () => {
         "Are you sure you want to delete your account?"
       );
       if (confirmDelete) {
-        const res = await axios.delete(`${URL}/api/v1/user/${user._id}`, {
+        const res = await axios.delete(`${URL}/api/v1/user/${user?._id}`, {
           withCredentials: true,
         });
         if (res?.data) {

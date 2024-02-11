@@ -15,11 +15,13 @@ const MyBlogs = () => {
   const getMyPosts = async () => {
     try {
       setLoading(true);
-      const res = await axios.get(`${URL}/api/v1/post/user/${user._id}`, {
-        withCredentials: true,
-      });
-      if (res?.data) {
-        setPosts(res?.data);
+      if (user?._id) {
+        const res = await axios.get(`${URL}/api/v1/post/user/${user?._id}`, {
+          withCredentials: true,
+        });
+        if (res?.data) {
+          setPosts(res?.data);
+        }
       }
       setLoading(false);
     } catch (error) {
@@ -29,7 +31,7 @@ const MyBlogs = () => {
   };
   useEffect(() => {
     getMyPosts();
-  }, []);
+  }, [user?._id]);
   return (
     <div>
       <Navbar />

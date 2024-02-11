@@ -1,6 +1,9 @@
 import User from "../models/User.js";
 import JWT from "jsonwebtoken";
 import { comparePassword, hashPassword } from "../helpers/authHelper.js";
+import dotenv from "dotenv";
+
+dotenv.config("../.env");
 
 export const registerController = async (req, res) => {
   try {
@@ -24,9 +27,13 @@ export const loginController = async (req, res) => {
     if (!match) {
       return res.status(401).json("Wrong email or password");
     }
-    const token = JWT.sign({ id: user?._id }, process.env.SECRET, {
-      expiresIn: "7d",
-    });
+    const token = JWT.sign(
+      { _id: user?._id, username: user?.username },
+      process.env.SECRET,
+      {
+        expiresIn: "7d",
+      }
+    );
     const { password, ...info } = user?._doc;
     res.cookie("token", token).status(200).json(info);
   } catch (error) {
@@ -42,5 +49,20 @@ export const logoutController = async (req, res) => {
       .json("Logged out successfully!");
   } catch (error) {
     res.status(500).json(error);
+  }
+};
+
+export const refetchUserController = async (req, res) => {
+  try {
+    const token = req.cookies.token;
+
+    JWT.verify(token, process.env.SECRET, {}, async (err, data) => {
+      if (err) {
+        return res.status(404).json(err);
+      }
+      res.status(200).json(data);
+    });
+  } catch (error) {
+    console.log(error);
   }
 };
