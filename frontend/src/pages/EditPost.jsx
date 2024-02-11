@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { ImCross } from "react-icons/im";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import { URL } from "../url";
+import { URL as url } from "../url";
+import Loader from "../components/Loader";
+import { useAuth } from "../context/UserContext";
 
 const EditPost = () => {
   const [cat, setCat] = useState("");
@@ -12,14 +14,23 @@ const EditPost = () => {
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [file, setFile] = useState(null);
+
+  const [photo, setPhoto] = useState("");
+  const [photoPreview, setPhotoPreview] = useState(null);
+  const navigate = useNavigate();
+  const [loader, setLoader] = useState(false);
   const postId = useParams().id;
+
+  const [user] = useAuth();
 
   const fetchPost = async () => {
     try {
-      const res = await axios.get(URL + "/api/v1/post/" + postId);
+      const res = await axios.get(url + "/api/v1/post/" + postId);
       setTitle(res?.data?.title);
       setDesc(res?.data?.desc);
       setFile(res?.data?.photo);
+      setPhoto(res.data?.photo);
+      setPhotoPreview(res?.data?.photo);
       setCats(res?.data?.categories);
     } catch (error) {
       console.log(error);
@@ -42,9 +53,50 @@ const EditPost = () => {
     updatedCats = updatedCats.filter((c) => c !== cat);
     setCats(updatedCats);
   };
-  const handleEdit = (e) => {
+  const handleEdit = async (e) => {
     e.preventDefault();
+    try {
+      const post = {
+        title,
+        desc,
+        photo,
+        username: user?.username,
+        userId: user?._id,
+        categories: cats,
+      };
+      const res = await axios.put(`${url}/api/v1/post/update/${postId}`, post, {
+        withCredentials: true,
+      });
+
+      // console.log(res?.data);
+      if (res?.data) navigate("/my-blogs");
+      else navigate("/");
+    } catch (error) {
+      console.log(error);
+    }
   };
+
+  const handleFileChange = async (e) => {
+    const selectedFile = e.target.files[0];
+    setFile(selectedFile);
+    setPhotoPreview(URL.createObjectURL(selectedFile));
+
+    const data = new FormData();
+    data.append("image", selectedFile);
+    //img upload
+    try {
+      setLoader(true);
+      const res = await axios.post(`${url}/api/v1/post/upload-image`, data);
+      if (res?.data) {
+        setPhoto(res?.data?.url);
+      }
+      setLoader(false);
+    } catch (error) {
+      console.log(error);
+      setLoader(false);
+    }
+  };
+
   return (
     <div>
       <Navbar />
@@ -61,7 +113,19 @@ const EditPost = () => {
             placeholder="Enter post title"
             className="px-4 py-2 outline-none"
           />
-          <input type="file" className="px-4 py-2 outline-none" />
+          <input
+            type="file"
+            accept="images/*"
+            onChange={handleFileChange}
+            className="px-4 py-2 outline-none"
+          />
+          {loader ? (
+            <Loader />
+          ) : (
+            photoPreview && (
+              <img src={photoPreview} alt="Preview" className="mt-2 max-w-xs" />
+            )
+          )}
           <div className="flex flex-col">
             <div className="flex items-center space-x-4 md:space-x-8">
               <input
