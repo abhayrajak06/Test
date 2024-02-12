@@ -23,3 +23,7 @@
     transform: scale(1.009);
     transition: 0.3s;
 }
+
+.active{
+    border-bottom: 2px solid black;
+}

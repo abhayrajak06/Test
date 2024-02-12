@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { BsSearch } from "react-icons/bs";
 import { GiCrossedBones } from "react-icons/gi";
 import { useAuth } from "../context/UserContext";
@@ -59,9 +59,13 @@ const Navbar = ({ setPosts, getAllPosts, setNoResults, setLoading }) => {
     >
       <div id="nav-wrap" className="flex md:gap-5 gap-2">
         <h1 className="text-xl font-extrabold">
-          <Link onClick={() => window.scrollTo(0, 0)} to={"/"}>
+          <NavLink
+            onClick={() => window.scrollTo(0, 0)}
+            to={"/"}
+            activeClassName="active"
+          >
             Blog Market
-          </Link>
+          </NavLink>
         </h1>
         {path === "/" && (
           <div className="flex gap-2  justify-center items-center space-x-0 ">
@@ -89,28 +93,40 @@ const Navbar = ({ setPosts, getAllPosts, setNoResults, setLoading }) => {
           {user ? (
             <>
               <h3 className="btn nav-btn bg-slate-200 rounded-md p-1 font-semibold">
-                <Link to={`/profile/${user._id}`}>Profile</Link>
+                <NavLink to={`/profile/${user._id}`} activeClassName="active">
+                  Profile
+                </NavLink>
               </h3>
               <h3 className="btn nav-btn bg-slate-200 rounded-md p-1 font-semibold">
-                <Link to="/write">Write</Link>
+                <NavLink to="/write" activeClassName="active">
+                  Write
+                </NavLink>
               </h3>
               <h3 className="btn nav-btn bg-slate-200 rounded-md p-1 font-semibold">
-                <Link to="/my-blogs">My Blogs</Link>
+                <NavLink to="/my-blogs" activeClassName="active">
+                  My Blogs
+                </NavLink>
               </h3>
               <h3
                 onClick={handleLogout}
                 className="btn nav-btn bg-slate-200 rounded-md p-1 font-semibold"
               >
-                <Link to="/login">Logout</Link>
+                <NavLink to="/login" activeClassName="active">
+                  Logout
+                </NavLink>
               </h3>
             </>
           ) : (
             <>
               <h3 className="btn nav-btn bg-slate-200 rounded-md p-1 font-semibold">
-                <Link to="/login">Login</Link>
+                <NavLink to="/login" activeClassName="active">
+                  Login
+                </NavLink>
               </h3>
               <h3 className="btn nav-btn bg-slate-200 rounded-md p-1 font-semibold">
-                <Link to="/register">Register</Link>
+                <NavLink to="/register" activeClassName="active">
+                  Register
+                </NavLink>
               </h3>
             </>
           )}
