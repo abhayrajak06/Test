@@ -15,7 +15,7 @@ const EditPost = () => {
   const [desc, setDesc] = useState("");
   const [file, setFile] = useState(null);
 
-  const [photo, setPhoto] = useState("");
+  const [photo, setPhoto] = useState();
   const [photoPreview, setPhotoPreview] = useState(null);
   const navigate = useNavigate();
   const [loader, setLoader] = useState(false);
@@ -171,7 +171,10 @@ const EditPost = () => {
             cols="30"
             rows="10"
           ></textarea>
-          <button className="bg-black w-full md:w-[20%] mx-auto text-white font-semibold px-4 py-2 md:text-xl text-lg">
+          <button
+            className="bg-black w-full md:w-[20%] mx-auto text-white font-semibold px-4 py-2 md:text-xl text-lg"
+            disabled={loader}
+          >
             Update
           </button>
         </form>
