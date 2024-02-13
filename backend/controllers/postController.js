@@ -46,10 +46,10 @@ export const getPostDetailsController = async (req, res) => {
   }
 };
 
-//get posts
+//get all posts
 export const getAllPostsController = async (req, res) => {
   try {
-    const posts = await Post.find();
+    const posts = await Post.find().sort({ createdAt: -1 });
     res.status(200).json(posts);
   } catch (error) {
     res.status(500).json(error);
@@ -82,7 +82,7 @@ export const searchPostController = async (req, res) => {
         { title: { $regex: keyword, $options: "i" } },
         { desc: { $regex: keyword, $options: "i" } },
       ],
-    });
+    }).sort({ createdAt: -1 });
 
     res.status(200).json(searchPosts);
   } catch (error) {

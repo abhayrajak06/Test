@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { BsSearch } from "react-icons/bs";
 import { GiCrossedBones } from "react-icons/gi";
+import { IoReorderThreeSharp } from "react-icons/io5";
 import { useAuth } from "../context/UserContext";
 import Cookies from "js-cookie";
 import toast from "react-hot-toast";
@@ -52,6 +53,21 @@ const Navbar = ({ setPosts, getAllPosts, setNoResults, setLoading }) => {
     navigate("/login");
   };
 
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 768px)");
+    if (mediaQuery.matches) {
+      setToggle(true);
+    }
+
+    const handleResize = () => {
+      setToggle(mediaQuery.matches);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <div
       className="flex flex-wrap gap-2 items-center justify-around px-6 md:px-[200px] py-4 bg-slate-100"
@@ -59,11 +75,7 @@ const Navbar = ({ setPosts, getAllPosts, setNoResults, setLoading }) => {
     >
       <div id="nav-wrap" className="flex md:gap-5 gap-2">
         <h1 className="text-xl font-extrabold">
-          <NavLink
-            onClick={() => window.scrollTo(0, 0)}
-            to={"/"}
-            activeClassName="active"
-          >
+          <NavLink onClick={() => window.scrollTo(0, 0)} to={"/"}>
             Blog Market
           </NavLink>
         </h1>
@@ -93,40 +105,28 @@ const Navbar = ({ setPosts, getAllPosts, setNoResults, setLoading }) => {
           {user ? (
             <>
               <h3 className="btn nav-btn bg-slate-200 rounded-md p-1 font-semibold">
-                <NavLink to={`/profile/${user._id}`} activeClassName="active">
-                  Profile
-                </NavLink>
+                <NavLink to={`/profile/${user._id}`}>Profile</NavLink>
               </h3>
               <h3 className="btn nav-btn bg-slate-200 rounded-md p-1 font-semibold">
-                <NavLink to="/write" activeClassName="active">
-                  Write
-                </NavLink>
+                <NavLink to="/write">Write</NavLink>
               </h3>
               <h3 className="btn nav-btn bg-slate-200 rounded-md p-1 font-semibold">
-                <NavLink to="/my-blogs" activeClassName="active">
-                  My Blogs
-                </NavLink>
+                <NavLink to="/my-blogs">My Blogs</NavLink>
               </h3>
               <h3
                 onClick={handleLogout}
                 className="btn nav-btn bg-slate-200 rounded-md p-1 font-semibold"
               >
-                <NavLink to="/login" activeClassName="active">
-                  Logout
-                </NavLink>
+                <NavLink to="/login">Logout</NavLink>
               </h3>
             </>
           ) : (
             <>
               <h3 className="btn nav-btn bg-slate-200 rounded-md p-1 font-semibold">
-                <NavLink to="/login" activeClassName="active">
-                  Login
-                </NavLink>
+                <NavLink to="/login">Login</NavLink>
               </h3>
               <h3 className="btn nav-btn bg-slate-200 rounded-md p-1 font-semibold">
-                <NavLink to="/register" activeClassName="active">
-                  Register
-                </NavLink>
+                <NavLink to="/register">Register</NavLink>
               </h3>
             </>
           )}
@@ -138,6 +138,14 @@ const Navbar = ({ setPosts, getAllPosts, setNoResults, setLoading }) => {
       >
         <p>
           <GiCrossedBones />{" "}
+        </p>
+      </div>
+      <div
+        onClick={handleToggle}
+        className={`md:hidden fixed top-3 right-3 ${toggle ? "" : "hidden"}`}
+      >
+        <p>
+          <IoReorderThreeSharp />{" "}
         </p>
       </div>
     </div>
