@@ -86,7 +86,7 @@ const Comment = ({ c, postDetails, fetchPostComments }) => {
         </h3>
         <div className="flex flex-wrap justify-center items-center space-x-4">
           <p className="text-gray-500 text-sm">
-            {new Date(c.updatedAt).toString().slice(0, 15)}
+            {new Date(c.updatedAt).toString().slice(3, 15)}
           </p>
           <p className="text-gray-500 text-sm">
             {new Date(c.updatedAt).toString().slice(16, 20)}

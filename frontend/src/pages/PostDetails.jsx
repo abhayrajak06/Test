@@ -10,6 +10,7 @@ import { URL } from "../url";
 import { useAuth } from "../context/UserContext";
 import Loader from "../components/Loader";
 import toast from "react-hot-toast";
+import { FaLock, FaShare } from "react-icons/fa";
 
 const PostDetails = () => {
   const [postDetails, setPostDetails] = useState({});
@@ -19,8 +20,14 @@ const PostDetails = () => {
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState("");
   const navigate = useNavigate();
-  // console.log(postId);
 
+  const copyPostURL = () => {
+    const postURL = window.location.href;
+    navigator.clipboard.writeText(postURL);
+    toast.success("Post URL copied to clipboard!");
+  };
+
+  // Function to post a comment
   const postComment = async (e) => {
     e.preventDefault();
     try {
@@ -43,6 +50,7 @@ const PostDetails = () => {
     }
   };
 
+  // Function to fetch comments for the post
   const fetchPostComments = async () => {
     try {
       const res = await axios.get(URL + "/api/v1/comment/comments/" + postId);
@@ -51,9 +59,8 @@ const PostDetails = () => {
       console.log(error);
     }
   };
-  useEffect(() => {
-    fetchPostComments();
-  }, [postId, comments, comment]);
+
+  // Function to get post details
   const getPostDetails = async () => {
     try {
       setLoading(true);
@@ -62,12 +69,13 @@ const PostDetails = () => {
         setPostDetails(res.data);
       }
       setLoading(false);
-      // console.log(postDetails);
     } catch (error) {
       console.log(error);
       setLoading(false);
     }
   };
+
+  // Function to delete the post
   const handleDeletePost = async () => {
     try {
       const confirmDelete = window.confirm(
@@ -84,9 +92,12 @@ const PostDetails = () => {
       console.log(error);
     }
   };
+
   useEffect(() => {
+    fetchPostComments();
     getPostDetails();
   }, [postId]);
+
   return (
     <div>
       <Navbar />
@@ -120,6 +131,15 @@ const PostDetails = () => {
             </div>
           </div>
           <img src={postDetails.photo} alt="" className="w-full h-full" />
+          <div className="flex mt-4 justify-end">
+            <button
+              title="Share Post"
+              className="rounded bg-slate-400 p-2 mr-2"
+              onClick={copyPostURL}
+            >
+              <FaShare className="cursor-pointer" size={20} />
+            </button>
+          </div>
           <p className="mx-auto mt-8">{postDetails.desc}</p>
           <div className="flex items-center mt-8 space-x-4 font-semibold">
             <p>Categories:</p>
@@ -129,8 +149,6 @@ const PostDetails = () => {
                   {cat}
                 </div>
               ))}
-
-              {/* <div className="bg-gray-300 rounded-lg px-3 py-1">Ai</div> */}
             </div>
           </div>
           <div className="flex flex-col mt-4">
@@ -148,20 +166,41 @@ const PostDetails = () => {
           {/* write a comment  */}
           <form
             onSubmit={postComment}
-            className="flex flex-col mt-4 md:flex-row"
+            className="flex flex-col mt-4 md:flex-row justify-between"
           >
             <input
               type="text"
               onChange={(e) => setComment(e.target.value)}
               value={comment}
-              className="md:w-[80%] outline-none px-4 mt-4 md:mt-0 py-2"
+              className="md:w-[70%] outline-none px-4 mt-4 md:mt-0 py-2 rounded bg-sky-100"
               placeholder="Write a comment"
+              onClick={() => {
+                if (!user) {
+                  navigate("/login");
+                }
+              }}
             />
             <button
               type="submit"
-              className="bg-black  text-white px-2 py-2 mt-4 md:mt-0 md:w-[20%]"
+              className={`${
+                comment.length > 0 ? "bg-black" : "bg-gray-500"
+              } text-white px-2 py-2 mt-4 md:mt-0 md:w-[20%] flex items-center justify-center cursor-pointer`}
+              onClick={(e) => {
+                if (!user) {
+                  e.preventDefault();
+                  navigate("/login");
+                }
+              }}
+              disabled={comment.length > 0 ? false : true}
             >
-              Add Comment
+              {user ? (
+                <h4>Add Comment</h4>
+              ) : (
+                <>
+                  <FaLock style={{ marginRight: "0.5rem" }} />
+                  <h6>Add Comment</h6>
+                </>
+              )}
             </button>
           </form>
         </div>

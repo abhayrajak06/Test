@@ -145,7 +145,7 @@ const Navbar = ({ setPosts, getAllPosts, setNoResults, setLoading }) => {
         className={`md:hidden fixed top-3 right-3 ${toggle ? "" : "hidden"}`}
       >
         <p>
-          <IoReorderThreeSharp />{" "}
+          <IoReorderThreeSharp size={30} />{" "}
         </p>
       </div>
     </div>
