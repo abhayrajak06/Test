@@ -76,7 +76,7 @@ const Navbar = ({ setPosts, getAllPosts, setNoResults, setLoading }) => {
       <div id="nav-wrap" className="flex md:gap-5 gap-2">
         <h1 className="text-xl font-extrabold">
           <NavLink onClick={() => window.scrollTo(0, 0)} to={"/"}>
-            Blog Market
+            Blog Bazaar
           </NavLink>
         </h1>
         {path === "/" && (
