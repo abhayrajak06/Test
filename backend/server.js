@@ -25,6 +25,10 @@ app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/post", postRoutes);
 app.use("/api/v1/comment", commentRoutes);
 
+// app.get("/", (req, res) => {
+//   res.json("Hello..........");
+// });
+
 app.listen(process.env.PORT, () => {
   console.log("Server is running...");
 });
