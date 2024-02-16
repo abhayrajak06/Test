@@ -17,9 +17,15 @@ dotenv.config();
 connectDB();
 
 //middlewares
+app.use(
+  cors({
+    origin: ["https://test-y43y.vercel.app/"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({ origin: "https://test-y43y.vercel.app/", credentials: true }));
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/post", postRoutes);
