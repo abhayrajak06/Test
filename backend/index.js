@@ -9,6 +9,7 @@ import postRoutes from "./routes/postRoutes.js";
 import commentRoutes from "./routes/commentRoutes.js";
 
 const app = express();
+app.use(cors());
 
 //config env
 dotenv.config();
@@ -17,14 +18,6 @@ dotenv.config();
 connectDB();
 
 //middlewares
-app.use(
-  cors({
-    origin: "*",
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
-  })
-);
-
 app.use(express.json());
 app.use(cookieParser());
 app.use("/api/v1/auth", authRoutes);
