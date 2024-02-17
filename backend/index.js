@@ -2,13 +2,13 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import connectDB from "./config/db.js";
-import cookieParser from "cookie-parser";
 import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import postRoutes from "./routes/postRoutes.js";
 import commentRoutes from "./routes/commentRoutes.js";
 
 const app = express();
+app.use(cors());
 
 // Load environment variables
 dotenv.config();
@@ -18,16 +18,15 @@ connectDB();
 
 // Middleware
 app.use(express.json());
-app.use(cookieParser());
 
 // CORS configuration
-app.use(
-  cors({
-    origin: "https://blog-bazaar-abhay.vercel.app/",
-    // origin: "http://localhost:5173",
-    credentials: true,
-  })
-);
+// app.use(
+//   cors({
+//     origin: "https://blog-bazaar-abhay.vercel.app/",
+//     // origin: "http://localhost:5173",
+//     credentials: true,
+//   })
+// );
 
 // Routes
 app.use("/api/v1/auth", authRoutes);
