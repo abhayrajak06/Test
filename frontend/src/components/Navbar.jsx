@@ -75,7 +75,7 @@ const Navbar = ({ setPosts, getAllPosts, setNoResults, setLoading }) => {
       className="flex flex-wrap gap-2 items-center justify-around px-6 md:px-[200px] py-4 bg-slate-100"
       style={{ position: "sticky", top: "0", zIndex: "65", opacity: "0.95" }}
     >
-      <div id="nav-wrap" className="flex mt-4 md:gap-5 gap-2">
+      <div id="nav-wrap" className="flex mt-2 md:gap-5 gap-2">
         <h1 className="text-xl font-extrabold">
           <NavLink onClick={() => window.scrollTo(0, 0)} to={"/"}>
             Blog Bazaar
