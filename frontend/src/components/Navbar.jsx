@@ -10,6 +10,7 @@ import { URL } from "../url";
 const Navbar = ({ setPosts, getAllPosts, setNoResults, setLoading }) => {
   const [toggle, setToggle] = useState(false);
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
+  const [searchOpen, setSearchOpen] = useState(false);
   const navigate = useNavigate();
   const path = useLocation().pathname;
   const [keyword, setKeyword] = useState("");
@@ -25,20 +26,9 @@ const Navbar = ({ setPosts, getAllPosts, setNoResults, setLoading }) => {
     navigate("/login");
   };
 
-  useEffect(() => {
-    const mediaQuery = window.matchMedia("(max-width: 768px)");
-    if (mediaQuery.matches) {
-      setToggle(true);
-    }
-
-    const handleResize = () => {
-      setToggle(mediaQuery.matches);
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  const handleSearchToggle = () => {
+    setSearchOpen(!searchOpen);
+  };
 
   const getAllSearchPosts = async () => {
     try {
@@ -65,6 +55,21 @@ const Navbar = ({ setPosts, getAllPosts, setNoResults, setLoading }) => {
     }
   }, [keyword]);
 
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 768px)");
+    if (mediaQuery.matches) {
+      setToggle(true);
+    }
+
+    const handleResize = () => {
+      setToggle(mediaQuery.matches);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <div
       className="flex flex-wrap gap-2 items-center justify-around px-6 md:px-[200px] py-4 bg-slate-100"
@@ -77,16 +82,16 @@ const Navbar = ({ setPosts, getAllPosts, setNoResults, setLoading }) => {
           </NavLink>
         </h1>
         {path === "/" && (
-          <div className="flex gap-2  justify-center items-center space-x-0 ">
+          <div className="flex gap-2 justify-center items-center space-x-0">
             <p className="p-2">
-              <BsSearch />
+              <BsSearch onClick={handleSearchToggle} />
             </p>
             <input
               type="text"
               value={keyword}
               onChange={(e) => setKeyword(e.target.value)}
               className={`search-bar mt-1 outline-none px-5 rounded w-[15rem] h-[2rem] ${
-                toggle ? "hidden" : ""
+                searchOpen ? "" : "hidden"
               }`}
               placeholder="Search"
             />
