@@ -35,7 +35,9 @@ export const loginController = async (req, res) => {
       }
     );
     const { password, ...info } = user?._doc;
-    res.cookie("token", token).status(200).json(info);
+    // Store token in localStorage
+    localStorage.setItem("token", token);
+    res.status(200).json(info);
   } catch (error) {
     res.status(500).json(error);
   }
@@ -43,10 +45,9 @@ export const loginController = async (req, res) => {
 
 export const logoutController = async (req, res) => {
   try {
-    res
-      .clearCookie("token", { sameSite: "none", secure: true })
-      .status(200)
-      .json("Logged out successfully!");
+    // Remove token from localStorage
+    localStorage.removeItem("token");
+    res.status(200).json("Logged out successfully!");
   } catch (error) {
     res.status(500).json(error);
   }
@@ -54,7 +55,7 @@ export const logoutController = async (req, res) => {
 
 export const refetchUserController = async (req, res) => {
   try {
-    const token = req.cookies.token;
+    const token = localStorage.getItem("token");
 
     JWT.verify(token, process.env.SECRET, {}, async (err, data) => {
       if (err) {

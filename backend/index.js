@@ -9,31 +9,38 @@ import postRoutes from "./routes/postRoutes.js";
 import commentRoutes from "./routes/commentRoutes.js";
 
 const app = express();
+
+// Load environment variables
+dotenv.config();
+
+// Connect to the database
+connectDB();
+
+// Middleware
+app.use(express.json());
+app.use(cookieParser());
+
+// CORS configuration
 app.use(
   cors({
-    origin: "*",
+    origin: "https://blog-bazaar-abhay.vercel.app/", // Change to your frontend URL
     credentials: true,
   })
 );
 
-//config env
-dotenv.config();
-
-//config database
-connectDB();
-
-//middlewares
-app.use(express.json());
-app.use(cookieParser());
+// Routes
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/post", postRoutes);
 app.use("/api/v1/comment", commentRoutes);
 
+// Default route
 app.get("/", (req, res) => {
-  res.json("Hello..........");
+  res.json("Hello from your API!");
 });
 
-app.listen(process.env.PORT || 5000, () => {
-  console.log("Server is running...");
+// Start the server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });

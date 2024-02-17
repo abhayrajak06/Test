@@ -5,15 +5,16 @@ import {
   updateUserController,
 } from "../controllers/userController.js";
 import verifyToken from "../middlewares/verifyToken.js";
+
 const router = express.Router();
 
-//update
+// Update user details
 router.put("/:id", verifyToken, updateUserController);
 
-//delete
+// Delete user account
 router.delete("/:id", verifyToken, deleteUserController);
 
-//get user
+// Get user details
 router.get("/:id", getUserController);
 
 export default router;

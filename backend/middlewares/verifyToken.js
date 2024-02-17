@@ -5,10 +5,18 @@ const verifyToken = (req, res, next) => {
   if (!token) {
     return res.status(401).json("You are not authorized");
   }
-  jwt.verify(token, process.env.SECRET, async (err, data) => {
+
+  jwt.verify(token, process.env.SECRET, (err, decoded) => {
     if (err) {
-      return res.status(403).json("Token is not valid");
+      if (err.name === "TokenExpiredError") {
+        return res.status(403).json("Token has expired");
+      } else if (err.name === "JsonWebTokenError") {
+        return res.status(403).json("Token is not valid");
+      } else {
+        return res.status(500).json("Internal Server Error");
+      }
     }
+    req.user = decoded;
     next();
   });
 };

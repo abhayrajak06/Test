@@ -9,16 +9,16 @@ import verifyToken from "../middlewares/verifyToken.js";
 
 const router = express.Router();
 
-//create
-router.post("/create", verifyToken, createCommentController);
+// Create a new comment
+router.post("/", verifyToken, createCommentController);
 
-//get post comments
-router.get("/comments/:postId", getAllCommentsController);
+// Get comments for a specific post
+router.get("/:postId", getAllCommentsController);
 
-//update comment
-router.put("/update/:cId", verifyToken, updateCommentController);
+// Update a comment
+router.put("/:cId", verifyToken, updateCommentController);
 
-//delete comment
-router.delete("/delete/:cId", verifyToken, deleteCommentController);
+// Delete a comment
+router.delete("/:cId", verifyToken, deleteCommentController);
 
 export default router;

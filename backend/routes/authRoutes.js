@@ -8,16 +8,16 @@ import {
 
 const router = express.Router();
 
-//Register
+// Register a new user
 router.post("/register", registerController);
 
-//Login
+// Login user
 router.post("/login", loginController);
 
-//Logout
+// Logout user
 router.get("/logout", logoutController);
 
-//REFETCH USER
-router.get("/refetch", refetchUserController);
+// Refetch user data
+router.get("/user", refetchUserController);
 
 export default router;

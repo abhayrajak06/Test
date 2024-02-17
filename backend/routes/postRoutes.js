@@ -11,30 +11,31 @@ import {
 } from "../controllers/postController.js";
 import verifyToken from "../middlewares/verifyToken.js";
 import formidable from "express-formidable";
+
 const router = express.Router();
 
-//create
-router.post("/create", verifyToken, createPostController);
+// Create a new post
+router.post("/", verifyToken, createPostController);
 
-//update
-router.put("/update/:id", verifyToken, updatePostController);
+// Update a post
+router.put("/:id", verifyToken, updatePostController);
 
-//delete
+// Delete a post
 router.delete("/:id", deletePostController);
 
-//get user posts
+// Get posts created by a specific user
 router.get("/user/:userId", verifyToken, getUserPostsController);
 
-//get all posts
+// Get all posts
 router.get("/", getAllPostsController);
 
-//get post details
+// Get details of a specific post
 router.get("/:postId", getPostDetailsController);
 
-//search posts
+// Search posts by keyword
 router.get("/search/:keyword", searchPostController);
 
-//image upload
+// Upload an image for a post
 router.post(
   "/upload-image",
   formidable({ maxFileSize: 5 * 1024 * 1024 }),
