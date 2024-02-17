@@ -8,7 +8,12 @@ import postRoutes from "./routes/postRoutes.js";
 import commentRoutes from "./routes/commentRoutes.js";
 
 const app = express();
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://blog-bazaar-abhay.vercel.app",
+    credentials: true,
+  })
+);
 
 // Load environment variables
 dotenv.config();
@@ -23,7 +28,6 @@ app.use(express.json());
 // app.use(
 //   cors({
 //     origin: "https://blog-bazaar-abhay.vercel.app/",
-//     // origin: "http://localhost:5173",
 //     credentials: true,
 //   })
 // );

@@ -78,7 +78,7 @@ const Navbar = ({ setPosts, getAllPosts, setNoResults, setLoading }) => {
         </h1>
         {path === "/" && (
           <div className="flex gap-2  justify-center items-center space-x-0 ">
-            <p className="p-2" onClick={handleToggle}>
+            <p className="p-2">
               <BsSearch />
             </p>
             <input
