@@ -20,14 +20,10 @@ const Login = () => {
     e.preventDefault();
     try {
       const { email, password } = details;
-      const res = await axios.post(
-        `${URL}/api/v1/auth/login`,
-        {
-          email,
-          password,
-        },
-        { withCredentials: true }
-      );
+      const res = await axios.post(`${URL}/api/v1/auth/login`, {
+        email,
+        password,
+      });
       if (res?.data) {
         toast.success("Login Successfully");
         setUser(res?.data);
