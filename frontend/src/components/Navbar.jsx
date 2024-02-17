@@ -130,20 +130,18 @@ const Navbar = ({ setPosts, getAllPosts, setNoResults, setLoading }) => {
         </div>
       </div>
       <div
-        onClick={handleToggle}
         className={`md:hidden fixed top-3 right-3 ${toggle ? "hidden" : ""}`}
       >
-        <p>
+        <span onClick={handleToggle}>
           <GiCrossedBones />{" "}
-        </p>
+        </span>
       </div>
       <div
-        onClick={handleToggle}
         className={`md:hidden fixed top-3 right-3 ${toggle ? "" : "hidden"}`}
       >
-        <p>
+        <span onClick={handleToggle}>
           <IoReorderThreeSharp size={30} />{" "}
-        </p>
+        </span>
       </div>
     </div>
   );
