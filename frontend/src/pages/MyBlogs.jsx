@@ -3,7 +3,6 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import axios from "axios";
 import { URL } from "../url";
-import { useAuth } from "../context/UserContext";
 import Loader from "../components/Loader";
 import { Link } from "react-router-dom";
 import HomePosts from "../components/HomePosts";
@@ -11,17 +10,24 @@ import HomePosts from "../components/HomePosts";
 const MyBlogs = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [user] = useAuth();
-  const getMyPosts = async () => {
+
+  const user = JSON.parse(localStorage.getItem("user"));
+  useEffect(() => {
+    if (user && user._id) {
+      getMyPosts(user?._id);
+    }
+  }, []);
+
+  const getMyPosts = async (userId) => {
     try {
       setLoading(true);
-      if (user?._id) {
-        const res = await axios.get(`${URL}/api/v1/post/user/${user?._id}`, {
-          withCredentials: true,
-        });
-        if (res?.data) {
-          setPosts(res?.data);
-        }
+      const res = await axios.get(`${URL}/api/v1/post/user/${userId}`, {
+        headers: {
+          Authorization: user?.token,
+        },
+      });
+      if (res?.data) {
+        setPosts(res?.data);
       }
       setLoading(false);
     } catch (error) {
@@ -29,9 +35,7 @@ const MyBlogs = () => {
       setLoading(false);
     }
   };
-  useEffect(() => {
-    getMyPosts();
-  }, [user?._id]);
+
   return (
     <div>
       <Navbar />

@@ -4,11 +4,6 @@ import { uploadOnCloudinary } from "../utils/cloudinary.js";
 
 export const createPostController = async (req, res) => {
   try {
-    // Check if the user is authenticated (token stored in localStorage)
-    const token = localStorage.getItem("token");
-    if (!token) {
-      return res.status(401).json("Unauthorized");
-    }
     const newPost = new Post(req.body);
     const savedPost = await newPost.save();
     res.status(200).json(savedPost);
@@ -52,5 +47,60 @@ export const uploadImage = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).json(error);
+  }
+};
+
+//get post details
+export const getPostDetailsController = async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.postId);
+    res.status(200).json(post);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
+//get all posts
+export const getAllPostsController = async (req, res) => {
+  try {
+    const posts = await Post.find().sort({ createdAt: -1 });
+    res.status(200).json(posts);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
+//get user posts
+export const getUserPostsController = async (req, res) => {
+  try {
+    const posts = await Post.find({ userId: req.params.userId });
+    res.status(200).json(posts);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
+// Search a post
+export const searchPostController = async (req, res) => {
+  try {
+    const { keyword } = req.params;
+
+    if (!keyword) {
+      return res
+        .status(400)
+        .json({ error: "Please provide a keyword for searching." });
+    }
+
+    const searchPosts = await Post.find({
+      $or: [
+        { title: { $regex: keyword, $options: "i" } },
+        { desc: { $regex: keyword, $options: "i" } },
+      ],
+    }).sort({ createdAt: -1 });
+
+    res.status(200).json(searchPosts);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };

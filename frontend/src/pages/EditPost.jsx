@@ -6,7 +6,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { URL as url } from "../url";
 import Loader from "../components/Loader";
-import { useAuth } from "../context/UserContext";
 
 const EditPost = () => {
   const [cat, setCat] = useState("");
@@ -21,7 +20,7 @@ const EditPost = () => {
   const [loader, setLoader] = useState(false);
   const postId = useParams().id;
 
-  const [user] = useAuth();
+  const user = JSON.parse(localStorage.getItem("user"));
 
   const fetchPost = async () => {
     try {
@@ -65,10 +64,11 @@ const EditPost = () => {
         categories: cats,
       };
       const res = await axios.put(`${url}/api/v1/post/update/${postId}`, post, {
-        // withCredentials: true,
+        headers: {
+          Authorization: user?.token,
+        },
       });
 
-      // console.log(res?.data);
       if (res?.data) navigate("/my-blogs");
       else navigate("/");
     } catch (error) {
@@ -83,7 +83,7 @@ const EditPost = () => {
 
     const data = new FormData();
     data.append("image", selectedFile);
-    //img upload
+
     try {
       setLoader(true);
       const res = await axios.post(`${url}/api/v1/post/upload-image`, data);

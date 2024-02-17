@@ -3,21 +3,42 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { BsSearch } from "react-icons/bs";
 import { GiCrossedBones } from "react-icons/gi";
 import { IoReorderThreeSharp } from "react-icons/io5";
-import { useAuth } from "../context/UserContext";
-import Cookies from "js-cookie";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { URL } from "../url";
 
 const Navbar = ({ setPosts, getAllPosts, setNoResults, setLoading }) => {
   const [toggle, setToggle] = useState(false);
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
+  const navigate = useNavigate();
+  const path = useLocation().pathname;
+  const [keyword, setKeyword] = useState("");
 
   const handleToggle = () => {
     setToggle(!toggle);
   };
-  const [keyword, setKeyword] = useState("");
-  const navigate = useNavigate();
-  const path = useLocation().pathname;
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    toast.success("Logout Successfully");
+    setUser(null);
+    navigate("/login");
+  };
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 768px)");
+    if (mediaQuery.matches) {
+      setToggle(true);
+    }
+
+    const handleResize = () => {
+      setToggle(mediaQuery.matches);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const getAllSearchPosts = async () => {
     try {
@@ -43,30 +64,6 @@ const Navbar = ({ setPosts, getAllPosts, setNoResults, setLoading }) => {
       else getAllPosts();
     }
   }, [keyword]);
-
-  const [user, setUser] = useAuth();
-
-  const handleLogout = () => {
-    Cookies.remove("token");
-    toast.success("Logout Successfully");
-    setUser(null);
-    navigate("/login");
-  };
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia("(max-width: 768px)");
-    if (mediaQuery.matches) {
-      setToggle(true);
-    }
-
-    const handleResize = () => {
-      setToggle(mediaQuery.matches);
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   return (
     <div
@@ -117,7 +114,7 @@ const Navbar = ({ setPosts, getAllPosts, setNoResults, setLoading }) => {
                 onClick={handleLogout}
                 className="btn nav-btn bg-slate-200 rounded-md p-1 font-semibold"
               >
-                <NavLink to="/login">Logout</NavLink>
+                Logout
               </h3>
             </>
           ) : (

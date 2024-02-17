@@ -10,23 +10,31 @@ const Login = () => {
     email: "",
     password: "",
   });
+  const [user, setUser] = useAuth();
   const [error, setError] = useState(false);
   const navigate = useNavigate();
-  const [, setUser] = useAuth();
+
   const handleChange = (e) => {
     setDetails({ ...details, [e.target.name]: e.target.value });
   };
+
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
       const { email, password } = details;
-      const res = await axios.post(`${URL}/api/v1/auth/login`, {
-        email,
-        password,
-      });
+      const res = await axios.post(
+        `${URL}/api/v1/auth/login`,
+        {
+          email,
+          password,
+        },
+        { withCredentials: true }
+      );
       if (res?.data) {
-        toast.success("Login Successfully");
+        // Save user data to localStorage
+        localStorage.setItem("user", JSON.stringify(res?.data));
         setUser(res?.data);
+        toast.success("Login Successfully");
         navigate("/");
       }
     } catch (error) {
@@ -34,19 +42,21 @@ const Login = () => {
       console.log(error);
     }
   };
+
   return (
     <>
       <div
         className="flex flex-wrap gap-2 items-center justify-between px-6 md:px-[200px] py-4 bg-slate-100"
         style={{ position: "sticky", top: "0", zIndex: "65", opacity: "0.95" }}
       >
-        <h1 className="text-xl  font-extrabold">
-          <Link to={"/"}>Blog Market</Link>
+        <h1 className="text-xl font-extrabold">
+          <Link to={"/"}>Blog Bazaar</Link>
         </h1>
         <h3 className="btn nav-btn bg-slate-200 rounded-md p-1 font-semibold">
           <Link to="/register">Register</Link>
         </h3>
       </div>
+      {/* Your header component */}
       <div className="w-full flex justify-center items-center h-[70vh]">
         <form
           onSubmit={handleLogin}
@@ -72,7 +82,7 @@ const Login = () => {
             onChange={handleChange}
           />
           <button
-            onClick={handleLogin}
+            type="submit"
             className="w-full px-4 py-4 text-lg font-bold text-white bg-black rounded-lg hover:bg-gray-500 hover:text-black"
           >
             Login

@@ -5,10 +5,6 @@ import Comment from "../models/Comment.js";
 
 export const updateUserController = async (req, res) => {
   try {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      return res.status(401).json("Unauthorized");
-    }
     if (req.body.password) {
       req.body.password = await hashPassword(req.body.password);
     }
@@ -25,19 +21,9 @@ export const updateUserController = async (req, res) => {
 
 export const deleteUserController = async (req, res) => {
   try {
-    // Check if the user is authenticated
-    const token = localStorage.getItem("token");
-    if (!token) {
-      return res.status(401).json("Unauthorized");
-    }
-
-    // Your authentication logic here
-
     await User.findByIdAndDelete(req.params.id);
     await Post.deleteMany({ userId: req.params.id });
     await Comment.deleteMany({ userId: req.params.id });
-
-    localStorage.removeItem("token");
 
     res.status(200).json("User has been deleted");
   } catch (error) {
@@ -47,16 +33,11 @@ export const deleteUserController = async (req, res) => {
 
 export const getUserController = async (req, res) => {
   try {
-    // Check if the user is authenticated
-    const token = localStorage.getItem("token");
-    if (!token) {
-      return res.status(401).json("Unauthorized");
-    }
-    const user = await User.findById(req.params.id);
+    const user = await User.findById(req.user._id);
     if (!user) {
       return res.status(404).json("User not found");
     }
-    const { password, ...info } = user?._doc;
+    const { password, ...info } = user._doc;
     res.status(200).json(info);
   } catch (error) {
     res.status(500).json(error);

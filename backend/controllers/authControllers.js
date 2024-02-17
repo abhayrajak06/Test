@@ -35,9 +35,8 @@ export const loginController = async (req, res) => {
       }
     );
     const { password, ...info } = user?._doc;
-    // Store token in localStorage
-    localStorage.setItem("token", token);
-    res.status(200).json(info);
+    // Send token to the client
+    res.status(200).json({ token, ...info });
   } catch (error) {
     res.status(500).json(error);
   }
@@ -50,20 +49,5 @@ export const logoutController = async (req, res) => {
     res.status(200).json("Logged out successfully!");
   } catch (error) {
     res.status(500).json(error);
-  }
-};
-
-export const refetchUserController = async (req, res) => {
-  try {
-    const token = localStorage.getItem("token");
-
-    JWT.verify(token, process.env.SECRET, {}, async (err, data) => {
-      if (err) {
-        return res.status(404).json(err);
-      }
-      res.status(200).json(data);
-    });
-  } catch (error) {
-    console.log(error);
   }
 };

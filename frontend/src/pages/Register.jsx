@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { URL } from "../url";
 import toast from "react-hot-toast";
-import { useAuth } from "../context/UserContext";
 
 const Register = () => {
   const [details, setDetails] = useState({
@@ -18,7 +17,6 @@ const Register = () => {
   });
   const [error, setError] = useState(false);
   const navigate = useNavigate();
-  const { setUser } = useAuth();
 
   const handleChange = (e) => {
     setDetails({ ...details, [e.target.name]: e.target.value });
@@ -72,6 +70,8 @@ const Register = () => {
 
       if (res?.data) {
         toast.success("Register Successfully !");
+        // Store user data in localStorage
+        localStorage.setItem("user", JSON.stringify(res.data));
         navigate("/login");
       }
     } catch (error) {

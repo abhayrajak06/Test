@@ -1,12 +1,13 @@
 import axios from "axios";
 import { createContext, useContext, useEffect, useState } from "react";
-import { URL } from "../url";
-import Cookies from "js-cookie";
 
 export const UserContext = createContext({});
 
 export function UserContextProvider({ children }) {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(() => {
+    const storedUser = localStorage.getItem("token");
+    return storedUser ? JSON.parse(storedUser) : null;
+  });
 
   useEffect(() => {
     getUser();
@@ -14,12 +15,10 @@ export function UserContextProvider({ children }) {
 
   const getUser = async () => {
     try {
-      const token = Cookies.get("token");
-      if (token) {
-        const res = await axios.get(URL + "/api/v1/auth/refetch", {
-          withCredentials: true,
-        });
-        setUser(res?.data);
+      const storedUser = localStorage.getItem("token");
+      if (storedUser) {
+        // You may want to implement token validation logic here
+        setUser(JSON.parse(storedUser));
       }
     } catch (err) {
       console.log(err);

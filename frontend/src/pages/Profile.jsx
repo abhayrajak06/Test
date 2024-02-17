@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { useAuth } from "../context/UserContext";
 import axios from "axios";
 import { URL } from "../url";
 import toast from "react-hot-toast";
@@ -11,13 +10,17 @@ const Profile = () => {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const [user, setUser] = useAuth();
+  const user = JSON.parse(localStorage.getItem("user"));
   const navigate = useNavigate();
 
   const getUserInfo = async () => {
     try {
-      if (user?._id) {
-        const res = await axios.get(`${URL}/api/v1/user/${user?._id}`);
+      if (user?._id && user?.token) {
+        const res = await axios.get(`${URL}/api/v1/user/${user?._id}`, {
+          headers: {
+            Authorization: user?.token,
+          },
+        });
         setName(res?.data.username);
         setEmail(res?.data.email);
       }
@@ -25,6 +28,7 @@ const Profile = () => {
       console.log(error);
     }
   };
+
   useEffect(() => {
     getUserInfo();
   }, [user?._id]);
@@ -36,6 +40,11 @@ const Profile = () => {
         {
           username: name,
           password: password,
+        },
+        {
+          headers: {
+            Authorization: user?.token,
+          },
         },
         { withCredentials: true }
       );
@@ -53,12 +62,20 @@ const Profile = () => {
         "Are you sure you want to delete your account?"
       );
       if (confirmDelete) {
-        const res = await axios.delete(`${URL}/api/v1/user/${user?._id}`, {
-          withCredentials: true,
-        });
+        const res = await axios.delete(
+          `${URL}/api/v1/user/${user?._id}`,
+          {
+            headers: {
+              Authorization: user?.token,
+            },
+          },
+          {
+            withCredentials: true,
+          }
+        );
         if (res?.data) {
           toast.success("Your account has been deleted successfully");
-          setUser(null);
+          localStorage.removeItem("user");
           navigate("/");
         }
       }

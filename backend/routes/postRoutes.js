@@ -18,7 +18,7 @@ const router = express.Router();
 router.post("/", verifyToken, createPostController);
 
 // Update a post
-router.put("/:id", verifyToken, updatePostController);
+router.put("/update/:id", verifyToken, updatePostController);
 
 // Delete a post
 router.delete("/:id", deletePostController);

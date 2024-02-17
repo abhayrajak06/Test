@@ -2,7 +2,6 @@ import express from "express";
 import {
   loginController,
   logoutController,
-  refetchUserController,
   registerController,
 } from "../controllers/authControllers.js";
 
@@ -16,8 +15,5 @@ router.post("/login", loginController);
 
 // Logout user
 router.get("/logout", logoutController);
-
-// Refetch user data
-router.get("/user", refetchUserController);
 
 export default router;

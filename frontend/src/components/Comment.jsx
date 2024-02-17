@@ -4,10 +4,11 @@ import { BiEdit } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
 import { URL } from "../url";
 import toast from "react-hot-toast";
-import { useAuth } from "../context/UserContext";
 
 const Comment = ({ c, postDetails, fetchPostComments }) => {
-  const [user] = useAuth();
+  const storedUser = localStorage.getItem("user");
+  const user = storedUser ? JSON.parse(storedUser) : null;
+
   const [updatePopupOpen, setUpdatePopupOpen] = useState(false);
   const [updatedComment, setUpdatedComment] = useState(c.comment);
   let isAuthor = false;
@@ -36,8 +37,12 @@ const Comment = ({ c, postDetails, fetchPostComments }) => {
         `${URL}/api/v1/comment/update/${c._id}`,
         {
           comment: updatedComment,
+        },
+        {
+          headers: {
+            Authorization: user?.token,
+          },
         }
-        // { withCredentials: true }
       );
       if (res?.data) {
         toast.success("Comment updated");
@@ -58,11 +63,14 @@ const Comment = ({ c, postDetails, fetchPostComments }) => {
         const res = await axios.delete(
           `${URL}/api/v1/comment/delete/${c._id}`,
           {
-            // withCredentials: true,
+            headers: {
+              Authorization: user?.token,
+            },
           }
         );
         if (res?.data) {
           toast.success("Comment deleted");
+          await fetchPostComments();
         }
       }
     } catch (error) {

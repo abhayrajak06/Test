@@ -7,7 +7,6 @@ import Comment from "../components/Comment";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { URL } from "../url";
-import { useAuth } from "../context/UserContext";
 import Loader from "../components/Loader";
 import toast from "react-hot-toast";
 import { FaLock, FaShare } from "react-icons/fa";
@@ -15,11 +14,11 @@ import { FaLock, FaShare } from "react-icons/fa";
 const PostDetails = () => {
   const [postDetails, setPostDetails] = useState({});
   const postId = useParams().id;
-  const [user] = useAuth();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState("");
-  const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem("user"));
 
   const copyPostURL = () => {
     const postURL = window.location.href;
@@ -38,8 +37,12 @@ const PostDetails = () => {
           author: user?.username,
           postId: postId,
           userId: user?._id,
+        },
+        {
+          headers: {
+            Authorization: user?.token,
+          },
         }
-        // { withCredentials: true }
       );
       if (res?.data) {
         fetchPostComments();
@@ -82,7 +85,11 @@ const PostDetails = () => {
         "Are you sure you want to delete this post?"
       );
       if (confirmDelete) {
-        const res = await axios.delete(`${URL}/api/v1/post/${postId}`);
+        const res = await axios.delete(`${URL}/api/v1/post/${postId}`, {
+          headers: {
+            Authorization: user?.token,
+          },
+        });
         if (res?.data) {
           toast.success("Post deleted successfully");
           navigate("/");

@@ -10,15 +10,15 @@ import verifyToken from "../middlewares/verifyToken.js";
 const router = express.Router();
 
 // Create a new comment
-router.post("/", verifyToken, createCommentController);
+router.post("/create", verifyToken, createCommentController);
 
 // Get comments for a specific post
-router.get("/:postId", getAllCommentsController);
+router.get("/comments/:postId", getAllCommentsController);
 
 // Update a comment
-router.put("/:cId", verifyToken, updateCommentController);
+router.put("/update/:cId", verifyToken, updateCommentController);
 
 // Delete a comment
-router.delete("/:cId", verifyToken, deleteCommentController);
+router.delete("/delete/:cId", verifyToken, deleteCommentController);
 
 export default router;

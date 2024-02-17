@@ -15,6 +15,6 @@ router.put("/:id", verifyToken, updateUserController);
 router.delete("/:id", verifyToken, deleteUserController);
 
 // Get user details
-router.get("/:id", getUserController);
+router.get("/:id", verifyToken, getUserController);
 
 export default router;

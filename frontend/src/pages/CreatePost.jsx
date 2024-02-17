@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { ImCross } from "react-icons/im";
-import { useAuth } from "../context/UserContext";
 import axios from "axios";
 import { URL as url } from "../url";
 import { useNavigate } from "react-router-dom";
@@ -11,16 +10,22 @@ import Loader from "../components/Loader";
 const CreatePost = () => {
   const [cat, setCat] = useState("");
   const [cats, setCats] = useState([]);
-
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [file, setFile] = useState(null);
   const [photo, setPhoto] = useState();
   const [photoPreview, setPhotoPreview] = useState(null);
-  const navigate = useNavigate();
   const [loader, setLoader] = useState(false);
 
-  const [user] = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check user authentication
+    const user = localStorage.getItem("user");
+    if (!user) {
+      navigate("/login");
+    }
+  }, [navigate]);
 
   const addCategory = () => {
     let updatedCats = new Set([...cats]);
@@ -30,6 +35,7 @@ const CreatePost = () => {
     }
     setCats([...updatedCats]);
   };
+
   const deleteCategory = (cat) => {
     let updatedCats = [...cats];
     updatedCats = updatedCats.filter((c) => c !== cat);
@@ -39,6 +45,8 @@ const CreatePost = () => {
   const handleCreate = async (e) => {
     e.preventDefault();
     try {
+      const user = JSON.parse(localStorage.getItem("user"));
+
       const post = {
         title,
         desc,
@@ -47,11 +55,13 @@ const CreatePost = () => {
         userId: user?._id,
         categories: cats,
       };
-      const res = await axios.post(`${url}/api/v1/post/create`, post, {
-        withCredentials: true,
+
+      const res = await axios.post(`${url}/api/v1/post/`, post, {
+        headers: {
+          Authorization: user?.token,
+        },
       });
 
-      // console.log(res?.data);
       if (res?.data) navigate("/my-blogs");
       else navigate("/");
     } catch (error) {
@@ -66,7 +76,7 @@ const CreatePost = () => {
 
     const data = new FormData();
     data.append("image", selectedFile);
-    //img upload
+
     try {
       setLoader(true);
       const res = await axios.post(`${url}/api/v1/post/upload-image`, data);

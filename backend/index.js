@@ -23,7 +23,8 @@ app.use(cookieParser());
 // CORS configuration
 app.use(
   cors({
-    origin: "https://blog-bazaar-abhay.vercel.app/", // Change to your frontend URL
+    origin: "https://blog-bazaar-abhay.vercel.app",
+    // origin: "http://localhost:5173",
     credentials: true,
   })
 );
