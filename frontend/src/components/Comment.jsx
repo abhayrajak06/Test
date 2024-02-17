@@ -36,8 +36,8 @@ const Comment = ({ c, postDetails, fetchPostComments }) => {
         `${URL}/api/v1/comment/update/${c._id}`,
         {
           comment: updatedComment,
-        },
-        { withCredentials: true }
+        }
+        // { withCredentials: true }
       );
       if (res?.data) {
         toast.success("Comment updated");
@@ -58,7 +58,7 @@ const Comment = ({ c, postDetails, fetchPostComments }) => {
         const res = await axios.delete(
           `${URL}/api/v1/comment/delete/${c._id}`,
           {
-            withCredentials: true,
+            // withCredentials: true,
           }
         );
         if (res?.data) {

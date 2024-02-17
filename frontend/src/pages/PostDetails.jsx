@@ -38,8 +38,8 @@ const PostDetails = () => {
           author: user?.username,
           postId: postId,
           userId: user?._id,
-        },
-        { withCredentials: true }
+        }
+        // { withCredentials: true }
       );
       if (res?.data) {
         fetchPostComments();

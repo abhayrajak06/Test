@@ -65,7 +65,7 @@ const EditPost = () => {
         categories: cats,
       };
       const res = await axios.put(`${url}/api/v1/post/update/${postId}`, post, {
-        withCredentials: true,
+        // withCredentials: true,
       });
 
       // console.log(res?.data);
@@ -112,6 +112,7 @@ const EditPost = () => {
             value={title}
             placeholder="Enter post title"
             className="px-4 py-2 outline-none"
+            required
           />
           <input
             type="file"
@@ -170,6 +171,7 @@ const EditPost = () => {
             placeholder="Enter post description"
             cols="30"
             rows="10"
+            required
           ></textarea>
           <button
             className="bg-black w-full md:w-[20%] mx-auto text-white font-semibold px-4 py-2 md:text-xl text-lg"

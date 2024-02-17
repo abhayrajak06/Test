@@ -48,7 +48,7 @@ const CreatePost = () => {
         categories: cats,
       };
       const res = await axios.post(`${url}/api/v1/post/create`, post, {
-        withCredentials: true,
+        // withCredentials: true,
       });
 
       // console.log(res?.data);
@@ -94,6 +94,7 @@ const CreatePost = () => {
             type="text"
             placeholder="Enter post title"
             className="px-4 py-2 outline-none"
+            required
           />
           <input
             onChange={handleFileChange}
@@ -152,6 +153,7 @@ const CreatePost = () => {
             placeholder="Enter post description"
             cols="30"
             rows="10"
+            required
           ></textarea>
           <button
             onClick={handleCreate}
