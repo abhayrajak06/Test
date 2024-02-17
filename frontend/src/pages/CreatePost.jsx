@@ -48,7 +48,7 @@ const CreatePost = () => {
         categories: cats,
       };
       const res = await axios.post(`${url}/api/v1/post/create`, post, {
-        // withCredentials: true,
+        withCredentials: true,
       });
 
       // console.log(res?.data);
