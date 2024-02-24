@@ -10,6 +10,7 @@ import { URL } from "../url";
 import Loader from "../components/Loader";
 import toast from "react-hot-toast";
 import { FaLock, FaShare } from "react-icons/fa";
+import { useAuth } from "../context/UserContext";
 
 const PostDetails = () => {
   const [postDetails, setPostDetails] = useState({});
@@ -18,7 +19,7 @@ const PostDetails = () => {
   const [loading, setLoading] = useState(false);
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState("");
-  const user = JSON.parse(localStorage.getItem("user"));
+  const [user] = useAuth();
 
   const copyPostURL = () => {
     const postURL = window.location.href;

@@ -6,10 +6,11 @@ import { IoReorderThreeSharp } from "react-icons/io5";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { URL } from "../url";
+import { useAuth } from "../context/UserContext";
 
 const Navbar = ({ setPosts, getAllPosts, setNoResults, setLoading }) => {
   const [toggle, setToggle] = useState(false);
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
+  const [user, setUser] = useAuth();
   const [searchOpen, setSearchOpen] = useState(false);
   const navigate = useNavigate();
   const path = useLocation().pathname;
@@ -117,7 +118,7 @@ const Navbar = ({ setPosts, getAllPosts, setNoResults, setLoading }) => {
               </h3>
               <h3
                 onClick={handleLogout}
-                className="btn nav-btn bg-slate-200 rounded-md p-1 font-semibold"
+                className="btn nav-btn bg-slate-200 rounded-md p-1 font-semibold cursor-pointer"
               >
                 Logout
               </h3>
