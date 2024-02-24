@@ -6,7 +6,6 @@ import axios from "axios";
 import { URL as url } from "../url";
 import { useNavigate } from "react-router-dom";
 import Loader from "../components/Loader";
-import { useAuth } from "../context/UserContext";
 
 const CreatePost = () => {
   const [cat, setCat] = useState("");
@@ -17,11 +16,12 @@ const CreatePost = () => {
   const [photo, setPhoto] = useState();
   const [photoPreview, setPhotoPreview] = useState(null);
   const [loader, setLoader] = useState(false);
-  const [user] = useAuth();
 
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Check user authentication
+    const user = localStorage.getItem("user");
     if (!user) {
       navigate("/login");
     }
@@ -45,7 +45,7 @@ const CreatePost = () => {
   const handleCreate = async (e) => {
     e.preventDefault();
     try {
-      // const user = JSON.parse(localStorage.getItem("user"));
+      const user = JSON.parse(localStorage.getItem("user"));
 
       const post = {
         title,

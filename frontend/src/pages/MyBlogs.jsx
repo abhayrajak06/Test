@@ -6,13 +6,12 @@ import { URL } from "../url";
 import Loader from "../components/Loader";
 import { Link } from "react-router-dom";
 import HomePosts from "../components/HomePosts";
-import { useAuth } from "../context/UserContext";
 
 const MyBlogs = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const [user] = useAuth();
+  const user = JSON.parse(localStorage.getItem("user"));
   useEffect(() => {
     if (user && user._id) {
       getMyPosts(user?._id);

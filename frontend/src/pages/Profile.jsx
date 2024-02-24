@@ -5,13 +5,12 @@ import axios from "axios";
 import { URL } from "../url";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/UserContext";
 
 const Profile = () => {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const [user] = useAuth();
+  const user = JSON.parse(localStorage.getItem("user"));
   const navigate = useNavigate();
 
   const getUserInfo = async () => {

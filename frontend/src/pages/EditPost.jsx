@@ -6,7 +6,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { URL as url } from "../url";
 import Loader from "../components/Loader";
-import { useAuth } from "../context/UserContext";
 
 const EditPost = () => {
   const [cat, setCat] = useState("");
@@ -21,7 +20,7 @@ const EditPost = () => {
   const [loader, setLoader] = useState(false);
   const postId = useParams().id;
 
-  const [user] = useAuth();
+  const user = JSON.parse(localStorage.getItem("user"));
 
   const fetchPost = async () => {
     try {
