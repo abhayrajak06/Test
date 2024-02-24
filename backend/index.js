@@ -10,8 +10,8 @@ import commentRoutes from "./routes/commentRoutes.js";
 const app = express();
 app.use(
   cors({
-    // origin: "https://blog-bazaar-abhay.vercel.app",
-    origin: "http://localhost:5173",
+    origin: "https://blog-bazaar-abhay.vercel.app",
+    // origin: "http://localhost:5173",
     credentials: true,
   })
 );
