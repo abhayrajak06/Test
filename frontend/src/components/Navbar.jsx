@@ -117,7 +117,7 @@ const Navbar = ({ setPosts, getAllPosts, setNoResults, setLoading }) => {
               </h3>
               <h3
                 onClick={handleLogout}
-                className="btn nav-btn bg-slate-200 rounded-md p-1 font-semibold"
+                className="btn nav-btn bg-slate-200 rounded-md p-1 font-semibold cursor-pointer"
               >
                 Logout
               </h3>

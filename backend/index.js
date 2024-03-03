@@ -25,14 +25,6 @@ connectDB();
 // Middleware
 app.use(express.json());
 
-// CORS configuration
-// app.use(
-//   cors({
-//     origin: "https://blog-bazaar-abhay.vercel.app/",
-//     credentials: true,
-//   })
-// );
-
 // Routes
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/user", userRoutes);

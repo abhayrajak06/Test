@@ -131,13 +131,17 @@ const PostDetails = () => {
             )}
           </div>
           <div className="flex items-center justify-between mt-2 md:mt-4">
-            <p>@{postDetails.username}</p>
+            <p className="font-bold">@{postDetails.username}</p>
             <div className="flex space-x-2">
               <p>{new Date(postDetails.createdAt).toString().slice(4, 16)}</p>
               <p>{new Date(postDetails.createdAt).toString().slice(16, 21)}</p>
             </div>
           </div>
-          <img src={postDetails.photo} alt="" className="w-full h-full" />
+          <img
+            src={postDetails.photo}
+            alt=""
+            className="w-full h-full mt-1  md:h-[40rem]"
+          />
           <div className="flex mt-4 justify-end">
             <button
               title="Share Post"
@@ -147,12 +151,30 @@ const PostDetails = () => {
               <FaShare className="cursor-pointer" size={20} />
             </button>
           </div>
-          <p className="mx-auto mt-8">{postDetails.desc}</p>
-          <div className="flex items-center mt-8 space-x-4 font-semibold">
-            <p>Categories:</p>
-            <div className="flex justify-center items-center space-x-2">
+          <div className="text-zinc-800 md:text-base text-sm">
+            <textarea
+              value={postDetails.desc || ""}
+              className="mx-auto mt-8 bg-slate-200 p-2  font-semibold  border rounded-lg border-gray-300 shadow-sm md:w-[76vw] w-[86vw]"
+              style={{
+                minHeight: "100px",
+                maxHeight: "150vh",
+                resize: "vertical",
+              }}
+              rows={
+                postDetails.desc ? postDetails.desc.split("\n").length + 1 : 1
+              }
+              disabled
+            ></textarea>
+          </div>
+
+          <div className="flex flex-wrap items-center mt-8 space-x-4 font-semibold">
+            <p className="mb-2">Categories:</p>
+            <div className="flex flex-wrap gap-4 justify-start md:justify-center items-center md:space-x-2">
               {postDetails.categories?.map((cat) => (
-                <div className="bg-gray-300 rounded-lg px-3 py-1" key={cat}>
+                <div
+                  key={cat}
+                  className="bg-gray-300 rounded-lg font-semibold px-3 py-1 text-xs cursor-pointer"
+                >
                   {cat}
                 </div>
               ))}
@@ -179,7 +201,7 @@ const PostDetails = () => {
               type="text"
               onChange={(e) => setComment(e.target.value)}
               value={comment}
-              className="md:w-[70%] outline-none px-4 mt-4 md:mt-0 py-2 rounded bg-sky-100"
+              className="md:w-[70%] outline-none px-4 mt-4 md:mt-0 py-2 rounded bg-gray-300"
               placeholder="Write a comment"
               onClick={() => {
                 if (!user) {
